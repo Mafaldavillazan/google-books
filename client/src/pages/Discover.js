@@ -1,29 +1,79 @@
-import React from "react";
+import React, { Component } from "react";
+import API from "./utils/API";
 
+import { BookList, BookListItem } from "./components/RecipeList";
+import { Container, Row, Col } from "./components/Grid";
 
-function Discover() {
+import Input from "./components/Input";
+import Button from "./components/Button";
+
+class Discover extends Component {
+  state = {
+    books: [],
+    bookSearch: ""
+  };
+
+  handleInputChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleFormSubmit = event => {
+    event.preventDefault();
+    API.getBooks(this.state.bookSearch)
+      .then(res => {
+        console.log(res.data);
+        this.setState({ books: res.data });
+      })
+      .catch(err => console.log(err));
+  };
+
+  render() {
     return (
       <div>
-          <h1>Dicover page</h1>
-          <h2>They're the Good Boys and Girls</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquet diam tortor, id
-                consequat mauris ullamcorper eu. Orci varius natoque penatibus et magnis dis
-                parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus
-                sollicitudin at et metus. Ut feugiat tellus nec metus commodo, sed suscipit nisi
-                gravida. Duis eget vestibulum quam, ut porttitor sem. Donec sagittis mi sollicitudin
-                turpis semper, et interdum risus lobortis. Vestibulum suscipit nunc non egestas
-                tristique. Proin hendrerit efficitur malesuada. Mauris lorem urna, sodales accumsan
-                quam non, tristique tempor erat. Nullam non sem facilisis, tempus tortor sit amet,
-                volutpat nisl. Ut et turpis non nunc maximus mollis a vitae tortor. Pellentesque
-                mattis risus ac quam laoreet cursus. Praesent suscipit orci neque, vestibulum
-                tincidunt augue tincidunt non. Duis consequat mattis tortor vitae mattis.
-              </p>
-            
-  
+        <Container>
+          <Row>
+            <Col size="md-12">
+              <form>
+                <Container>
+                  <Row>
+                    <Col size="xs-9 sm-10">
+                      <Input
+                        name="bookSearch"
+                        value={this.state.bookSearch}
+                        onChange={this.handleInputChange}
+                        placeholder="Search For a Book"
+                      />
+                    </Col>
+                    <Col size="xs-3 sm-2">
+                      <Button
+                        onClick={this.handleFormSubmit}
+                        type="success"
+                        className="input-lg"
+                      >
+                        Search
+                      </Button>
+                    </Col>
+                  </Row>
+                </Container>
+              </form>
+            </Col>
+          </Row>
+          <Row>
+            <Col size="xs-12">
+              <BookList>
+                {this.state.books.map(books => (
+                  <BookListItem key={books.href} title={books.title} href={books.href} />
+                ))}
+              </BookList>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
-
+}
 
 export default Discover;
