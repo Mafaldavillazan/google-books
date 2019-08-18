@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import API from "./utils/API";
+import API from "../utils/API";
 
-import { BookList, BookListItem } from "./components/RecipeList";
-import { Container, Row, Col } from "./components/Grid";
+import { BookList, BookListItem } from "../components/BookList";
+import { Container, Row, Col } from "../components/Grid";
 
-import Input from "./components/Input";
-import Button from "./components/Button";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 class Discover extends Component {
   state = {
@@ -65,7 +65,7 @@ class Discover extends Component {
             <Col size="xs-12">
               <BookList>
                 {this.state.books.map(books => (
-                  <BookListItem key={books.href} title={books.title} href={books.href} />
+                  <BookListItem key={books.href} title={books.title} />
                 ))}
               </BookList>
             </Col>
