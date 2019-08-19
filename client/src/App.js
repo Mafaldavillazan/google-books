@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Discover from "./pages/Discover";
+import Saved from "./pages/Saved";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Navbar from "./components/Navbar";
@@ -14,8 +14,8 @@ function App() {
         <Navbar />
         <Wrapper>
           <Route exact path="/" component={Home} />
-          <Route exact path="/discover" component={Discover} />
           <Route exact path="/search" component={Search} />
+          <Route exact path="/saved" component={Saved} />
         </Wrapper>
         <Footer />
       </div>

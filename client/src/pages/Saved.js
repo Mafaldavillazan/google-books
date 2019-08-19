@@ -6,6 +6,7 @@ import { Container, Row, Col } from "../components/Grid";
 
 import Input from "../components/Input";
 import Button from "../components/Button";
+import Jumbotron from "../components/Jumbotron";
 
 class Discover extends Component {
   state = {
@@ -33,6 +34,7 @@ class Discover extends Component {
   render() {
     return (
       <div>
+        <Jumbotron />
         <Container>
           <Row>
             <Col size="md-12">
@@ -53,7 +55,7 @@ class Discover extends Component {
                         type="success"
                         className="input-lg"
                       >
-                        Search
+                        Show
                       </Button>
                     </Col>
                   </Row>
