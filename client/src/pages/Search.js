@@ -10,8 +10,11 @@ import Jumbotron from "../components/Jumbotron";
 
 class Search extends Component {
   state = {
-    books: [],
-    bookSearch: ""
+    title: "",
+    author: "",
+    description: "",
+    image: "",
+    books: []
   };
 
   handleInputChange = event => {
@@ -21,7 +24,7 @@ class Search extends Component {
     });
   };
 
-  handleFormSubmit = event => {
+  displayAPISubmit = event => {
     event.preventDefault();
     API.getBooks(this.state.bookSearch)
       .then(res => {
@@ -30,6 +33,19 @@ class Search extends Component {
       })
       .catch(err => console.log(err));
   };
+
+  handleDBSubmit = (event) => {
+    event.preventDefault();
+    API.saveBook({
+      title: this.state.title,
+      author: this.state.author,
+      synopsis: this.state.synopsis
+    }).then(newBook => {
+      this.setState({
+        books: [newBook, ...this.state.books]
+      });
+    });
+  }
 
   render() {
     return (
@@ -55,7 +71,7 @@ class Search extends Component {
                         type="success"
                         className="input-lg"
                       >
-                        Search
+                        Show
                       </Button>
                     </Col>
                   </Row>

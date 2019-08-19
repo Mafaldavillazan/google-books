@@ -1,34 +1,32 @@
 import React, { Component } from "react";
 import API from "../utils/API";
 
+import DeleteBtn from "../components/DeleteBtn";
 import { BookList, BookListItem } from "../components/BookList";
 import { Container, Row, Col } from "../components/Grid";
 
-import Input from "../components/Input";
-import Button from "../components/Button";
 import Jumbotron from "../components/Jumbotron";
 
-class Discover extends Component {
+class Saved extends Component {
   state = {
-    books: [],
-    bookSearch: ""
+    books: []
   };
 
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
+  handleDelete = (id) => (event) => {
+    event.preventDefault();
+    API.deleteBook(id).then(() => {
+      this.setState({
+        books: this.state.books.filter(book => book._id !== id)
+      });
     });
   };
 
-  handleFormSubmit = event => {
-    event.preventDefault();
-    API.getBooks(this.state.bookSearch)
-      .then(res => {
-        console.log(res.data);
-        this.setState({ books: res.data });
-      })
-      .catch(err => console.log(err));
+  componentDidMount = () => {
+    this.getBooksForDisplay();
+  };
+
+  getBooksForDisplay = () => {
+    API.getBooks().then(books => this.setState({ books }))
   };
 
   render() {
@@ -37,40 +35,27 @@ class Discover extends Component {
         <Jumbotron />
         <Container>
           <Row>
-            <Col size="md-12">
-              <form>
-                <Container>
-                  <Row>
-                    <Col size="xs-9 sm-10">
-                      <Input
-                        name="bookSearch"
-                        value={this.state.bookSearch}
-                        onChange={this.handleInputChange}
-                        placeholder="Search For a Book"
-                      />
-                    </Col>
-                    <Col size="xs-3 sm-2">
-                      <Button
-                        onClick={this.handleFormSubmit}
-                        type="success"
-                        className="input-lg"
-                      >
-                        Show
-                      </Button>
-                    </Col>
-                  </Row>
-                </Container>
-              </form>
-            </Col>
-          </Row>
-          <Row>
+            <div>
+              <h1>Books that are saved</h1>
+            </div>
             <Col size="xs-12">
+
               <BookList>
-                {this.state.books.map(books => (
-                  <BookListItem key={books.href} title={books.title} />
+                {this.state.books.map(book => (
+                  <BookListItem key={book._id}>
+                    <a href={"/books/" + book._id}>
+                      <strong>
+                        {book.title} by {book.author}
+                      </strong>
+                    </a>
+                    <DeleteBtn onClick={this.handleDelete(book._id)} />
+                  </BookListItem>
                 ))}
               </BookList>
-            </Col>
+              ) : (
+              <h3>No Results to Display</h3>
+              )}
+          </Col>
           </Row>
         </Container>
       </div>
@@ -78,4 +63,4 @@ class Discover extends Component {
   }
 }
 
-export default Discover;
+export default Saved;
